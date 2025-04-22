@@ -184,6 +184,123 @@
         .inactive-prompt {
             display: none;
         }
+        
+        /* Media queries pour les appareils mobiles */
+        @media only screen and (max-width: 600px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .header p {
+                font-size: 14px;
+            }
+            
+            .card-title {
+                font-size: 20px;
+                padding: 12px;
+            }
+            
+            .section-title {
+                font-size: 18px;
+                margin: 16px 0 12px 0;
+            }
+            
+            .theme-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                margin: 16px 0;
+            }
+            
+            .theme-card {
+                padding: 12px;
+                margin-bottom: 10px;
+            }
+            
+            .theme-card h3 {
+                font-size: 16px;
+            }
+            
+            .theme-card p {
+                font-size: 13px;
+                margin-bottom: 0;
+            }
+            
+            .prompt-content {
+                font-size: 12px;
+                padding: 12px;
+                white-space: normal;
+                overflow-x: auto;
+            }
+            
+            .container {
+                padding: 8px;
+            }
+            
+            .card-content {
+                padding: 12px 8px;
+            }
+            
+            /* Amélioration des onglets sur mobile */
+            .tabs .tab a {
+                padding: 0 8px;
+                font-size: 13px;
+            }
+            
+            /* Bouton de copie adapté */
+            .copy-btn {
+                bottom: 16px;
+                right: 16px;
+                padding: 10px 16px;
+                font-size: 14px;
+                width: auto;
+            }
+            
+            /* Amélioration du toast de confirmation */
+            .toast {
+                bottom: 70px;
+                right: 16px;
+                padding: 12px 16px;
+                font-size: 13px;
+            }
+            
+            /* Ajustement de la hauteur de la carte pour mobile */
+            .card {
+                margin-bottom: 16px;
+            }
+            
+            /* Espacement des lignes pour meilleure lisibilité sur mobile */
+            body {
+                line-height: 1.4;
+            }
+        }
+
+        /* Améliorations tactiles pour les interactions */
+        @media (hover: none) {
+            .theme-card:active {
+                transform: translateY(-2px);
+                background-color: #f9f9f9;
+            }
+            
+            .copy-btn:active {
+                transform: scale(0.97);
+            }
+            
+            .tabs .tab a {
+                padding-top: 12px;
+                padding-bottom: 12px;
+            }
+            
+            /* Zone tactile plus large pour les onglets */
+            .tabs .tab {
+                height: 48px;
+                line-height: 48px;
+            }
+            
+            /* Zone de défilement améliorée pour les contenus de prompt */
+            .prompt-content {
+                -webkit-overflow-scrolling: touch;
+            }
+        }
     </style>
 </head>
 <body>
@@ -374,6 +491,9 @@ Une fois ces informations partagées, je pourrai adopter différentes perspectiv
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Amélioration pour le défilement tactile
+            document.addEventListener('touchstart', function() {}, {passive: true});
+            
             // Initialisation des onglets
             var tabsElement = document.querySelector('.tabs');
             var tabsInstance = M.Tabs.init(tabsElement, {
@@ -463,6 +583,15 @@ Une fois ces informations partagées, je pourrai adopter différentes perspectiv
             // Configurer tous les boutons de copie avec la même fonction
             document.querySelectorAll('[id^="copy-prompt"]').forEach(function(button) {
                 button.addEventListener('click', copyCurrentPrompt);
+                
+                // Ajout d'amélioration tactile
+                button.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.97)';
+                });
+                
+                button.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                });
             });
             
             // Initialiser l'affichage
