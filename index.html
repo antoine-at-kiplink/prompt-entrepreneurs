@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompts IA pour Entrepreneurs</title>
+    <!-- Material Design Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/4.0.0/font/MaterialIcons-Regular.ttf" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Material Design Components -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --mdc-theme-primary: #1976d2;
+            --mdc-theme-secondary: #ff4081;
+            --mdc-theme-background: #f5f5f5;
+            --mdc-theme-surface: #ffffff;
+            --mdc-theme-error: #b00020;
+            --mdc-theme-on-primary: #ffffff;
+            --mdc-theme-on-secondary: #ffffff;
+            --mdc-theme-on-surface: #000000;
+            --mdc-theme-on-error: #ffffff;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--mdc-theme-background);
+            color: rgba(0, 0, 0, 0.87);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .card {
+            border-radius: 4px;
+            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+            background-color: var(--mdc-theme-surface);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        .card-title {
+            font-size: 24px;
+            font-weight: 500;
+            padding: 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+            margin: 0;
+            color: var(--mdc-theme-primary);
+        }
+        .card-content {
+            padding: 16px;
+        }
+        .header {
+            background-color: var(--mdc-theme-primary);
+            color: var(--mdc-theme-on-primary);
+            padding: 24px 16px;
+            margin-bottom: 24px;
+        }
+        .header h1 {
+            font-size: 32px;
+            font-weight: 400;
+            margin: 0;
+        }
+        .header p {
+            font-size: 16px;
+            margin: 8px 0 0 0;
+        }
+        .copy-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--mdc-theme-primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .copy-btn:hover {
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        .copy-btn i {
+            margin-right: 8px;
+        }
+        .copy-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            background-color: #323232;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1001;
+            display: none;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+        }
+        .tabs .tab a {
+            color: rgba(25, 118, 210, 0.7);
+        }
+        .tabs .tab a:hover, .tabs .tab a.active {
+            color: var(--mdc-theme-primary);
+        }
+        .tabs .indicator {
+            background-color: var(--mdc-theme-primary);
+        }
+        .prompt-content {
+            background-color: #f9f9f9;
+            padding: 16px;
+            border-radius: 4px;
+            border-left: 4px solid var(--mdc-theme-primary);
+            margin: 16px 0;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 24px 0 16px 0;
+            color: var(--mdc-theme-primary);
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(25, 118, 210, 0.2);
+        }
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 24px 0;
+        }
+        .theme-card {
+            padding: 16px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .theme-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .theme-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--mdc-theme-primary);
+        }
+        .theme-card h3 {
+            margin-top: 0;
+            font-size: 18px;
+            color: var(--mdc-theme-primary);
+        }
+        .theme-card p {
+            color: rgba(0, 0, 0, 0.6);
+            font-size: 14px;
+        }
+        .active-prompt {
+            display: block;
+        }
+        .inactive-prompt {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>Prompts IA pour Entrepreneurs</h1>
+            <p>Optimisez votre création d'entreprise avec ces prompts spécialisés</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-content">
+                <div class="row">
+                    <div class="col s12">
+                        <ul class="tabs">
+                            <li class="tab col s4"><a href="#prompt1" class="active">Prospection</a></li>
+                            <li class="tab col s4"><a href="#prompt2">Optimisation</a></li>
+                            <li class="tab col s4"><a href="#prompt3">Stratégie</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div id="prompt1" class="col s12 active-prompt">
+                        <h2 class="section-title">Constitution de listing de prospects</h2>
+                        <p>Transformez vos données brutes en listings structurés et exploitables pour optimiser votre prospection.</p>
+                        
+                        <div class="theme-grid">
+                            <div class="theme-card">
+                                <h3>Extraction de données</h3>
+                                <p>Nettoyage et structuration des informations pour faciliter votre exploitation commerciale.</p>
+                            </div>
+                            <div class="theme-card">
+                                <h3>Organisation ciblée</h3>
+                                <p>Création de tableaux de prospects qui répondent précisément à vos besoins commerciaux.</p>
+                            </div>
+                            <div class="theme-card">
+                                <h3>Contrôle qualité</h3>
+                                <p>Vérification systématique de la fiabilité des données pour maximiser votre taux de conversion.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="prompt-content" id="prompt1-content">Constitution de listing de prospects
+Contexte
+
+Qui est qui ? Vous êtes un entrepreneur qui a besoin de transformer des données brutes en un listing structuré et exploitable de prospects. Je suis une IA conçue pour vous aider à organiser et structurer ces informations.
+Qui fait quoi ? Vous me fournissez les données brutes et les critères de sélection directement dans notre conversation, puis je m'occupe d'extraire, nettoyer et organiser ces informations dans un format exploitable que vous pourrez exporter en CSV.
+
+Objectifs
+
+Transformer vos données brutes en un listing structuré et exploitable
+Créer un tableau de prospects qui répond précisément à vos besoins commerciaux
+Faciliter le contrôle qualité et l'utilisation ultérieure de ces données
+
+Contraintes
+
+Je n'ai pas la capacité de faire des recherches sur Internet ou d'accéder à des bases de données externes - vous devez copier-coller toutes les informations à traiter directement dans notre conversation
+Nous ne conserverons que les données strictement nécessaires à votre prospection
+Nous inclurons une variable de contrôle pour vérifier la qualité des données
+
+Ouverture
+Pour commencer notre travail ensemble, pourriez-vous me préciser :
+
+Quels types d'informations souhaitez-vous inclure dans votre listing final (noms, emails, secteurs d'activité, etc.) ?
+Sous quelle forme avez-vous actuellement vos données brutes (texte, tableaux partiels, fiches, etc.) ?
+Pourriez-vous me fournir quelques exemples de ces données brutes (3-5 échantillons) en les copiant-collant directement dans notre conversation ?
+Souhaitez-vous que j'intègre également des entreprises ou organisations similaires à partir de mes connaissances pour enrichir votre listing ?
+
+Une fois que j'aurai ces informations, nous pourrons affiner ensemble la structure optimale de votre listing et identifier la meilleure variable de contrôle pour assurer la qualité des données.</div>
+                    </div>
+                    
+                    <div id="prompt2" class="col s12 inactive-prompt">
+                        <h2 class="section-title">Optimisation du temps et simplification des processus</h2>
+                        <p>Identifiez vos principales sources de perte de temps et développez des solutions simples mais efficaces.</p>
+                        
+                        <div class="theme-grid">
+                            <div class="theme-card">
+                                <h3>Analyse comparative</h3>
+                                <p>Identification précise des 2-3 principaux "timekillers" qui freinent votre développement.</p>
+                            </div>
+                            <div class="theme-card">
+                                <h3>Solutions pragmatiques</h3>
+                                <p>Développement de méthodes simples et immédiatement applicables sans investissement majeur.</p>
+                            </div>
+                            <div class="theme-card">
+                                <h3>Templates réutilisables</h3>
+                                <p>Création de modèles adaptés à votre contexte pour gagner un temps précieux.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="prompt-content" id="prompt2-content">Optimisation du temps et simplification des processus
+Contexte
+
+Qui est qui ? Vous êtes un entrepreneur qui cherche à optimiser votre temps et vos processus sans recourir à des outils d'automatisation complexes. Je suis une IA conçue pour vous aider à identifier et mettre en place des solutions simples mais efficaces.
+Qui fait quoi ? Vous répondez à mes questions comparatives pour identifier vos principales sources de perte de temps, puis je vous aide à développer des solutions pratiques selon les principes de la Loi de Pareto (20% des efforts produisent 80% des résultats) et l'approche "Do things that don't scale" de Paul Graham.
+
+Objectifs
+
+Identifier précisément les 2-3 principaux "timekillers" dans votre activité
+Développer des solutions simples et immédiatement applicables pour ces points critiques
+Créer des modèles et templates réutilisables adaptés à votre contexte spécifique
+
+Contraintes
+
+Nous nous concentrerons sur des solutions simples et rapidement applicables, sans investissement majeur
+Les optimisations proposées doivent être cohérentes avec votre phase de développement actuelle
+Nous privilégierons la simplification plutôt que la technologie pour résoudre les problèmes
+
+Ouverture
+Pour commencer notre analyse et vous aider à prendre de la hauteur sur votre activité, je vais vous demander de comparer certains aspects de votre travail :
+
+Entre l'acquisition de nouveaux clients et le service aux clients existants, quelle activité vous prend le plus de temps actuellement ? Pourriez-vous estimer approximativement le ratio de temps consacré à chacune (ex : 70/30) ?
+Concernant l'activité que vous venez d'identifier comme la plus chronophage, pouvez-vous la décomposer en 2-3 sous-activités principales et les classer de la plus chronophage à la moins chronophage ?
+
+À partir de vos réponses, nous poursuivrons notre analyse comparative pour identifier avec précision les véritables "timekillers" de votre activité, puis nous élaborerons ensemble des solutions pratiques.</div>
+                    </div>
+                    
+                    <div id="prompt3" class="col s12 inactive-prompt">
+                        <h2 class="section-title">Challenger sa stratégie de marché</h2>
+                        <p>Testez la solidité de votre proposition de valeur face à différentes perspectives de marché.</p>
+                        
+                        <div class="theme-grid">
+                            <div class="theme-card">
+                                <h3>Test de proposition de valeur</h3>
+                                <p>Confrontation constructive de votre argumentaire face à différents interlocuteurs simulés.</p>
+                            </div>
+                            <div class="theme-card">
+                                <h3>Détection de faiblesses</h3>
+                                <p>Identification des zones d'ombre ou points faibles dans votre stratégie commerciale.</p>
+                            </div>
+                            <div class="theme-card">
+                                <h3>Affinage stratégique</h3>
+                                <p>Optimisation de votre discours et de votre distribution pour maximiser l'impact sur le marché.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="prompt-content" id="prompt3-content">Challenger sa stratégie de marché
+Contexte
+
+Qui est qui ? Vous êtes un entrepreneur qui souhaite affiner votre proposition de valeur, votre discours commercial et votre stratégie de distribution. Je suis une IA conçue pour simuler différentes perspectives de marché et vous aider à identifier les points d'amélioration.
+Qui fait quoi ? Vous me présentez votre stratégie actuelle et les éléments clés de votre offre, puis j'adopte successivement différentes perspectives (client, concurrent, investisseur, etc.) pour challenger constructivement votre approche.
+
+Objectifs
+
+Tester la solidité et la clarté de votre proposition de valeur face à différents interlocuteurs
+Identifier les zones d'ombre ou les faiblesses dans votre argumentaire commercial
+Affiner votre stratégie de distribution pour maximiser son impact sur le marché cible
+
+Contraintes
+
+L'exercice doit rester constructif et orienté vers des améliorations concrètes
+Nous nous baserons uniquement sur les informations que vous me fournirez sur votre marché
+Chaque perspective adoptée sera clairement identifiée pour faciliter votre analyse
+
+Ouverture
+Pour commencer cet exercice de confrontation constructive, pourriez-vous me fournir les informations suivantes :
+
+Quelle est, en quelques phrases, votre proposition de valeur actuelle ?
+Qui sont vos clients cibles (profil, besoins principaux, problèmes qu'ils rencontrent) ?
+Quels sont les principaux arguments que vous utilisez actuellement pour convaincre vos prospects ?
+Comment distribuez-vous actuellement votre offre (canaux de vente et de communication) ?
+
+Une fois ces informations partagées, je pourrai adopter différentes perspectives pour challenger votre approche et vous aider à l'affiner de manière concrète.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bouton Copier mon prompt -->
+    <button id="copy-prompt1-btn" class="copy-btn waves-effect waves-light visible">
+        Copier mon prompt
+    </button>
+    
+    <button id="copy-prompt2-btn" class="copy-btn waves-effect waves-light">
+        Copier mon prompt
+    </button>
+    
+    <button id="copy-prompt3-btn" class="copy-btn waves-effect waves-light">
+        Copier mon prompt
+    </button>
+    
+    <!-- Toast de confirmation -->
+    <div id="copy-toast" class="toast">
+        Prompt copié dans le presse-papiers !
+    </div>
+
+    <!-- Material Design Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialisation des onglets
+            var tabsElement = document.querySelector('.tabs');
+            var tabsInstance = M.Tabs.init(tabsElement, {
+                swipeable: false,
+                responsiveThreshold: Infinity
+            });
+            
+            // Gestion de l'affichage des prompts et des boutons
+            const tabs = document.querySelectorAll('.tab a');
+            const copyButtons = document.querySelectorAll('[id^="copy-prompt"]');
+            
+            // Afficher/masquer les prompts en fonction de l'onglet actif
+            function updateActivePrompt() {
+                const activeTabId = document.querySelector('.tab a.active').getAttribute('href').substring(1);
+                
+                document.querySelectorAll('[id^="prompt"].col').forEach(function(tab) {
+                    if (tab.id === activeTabId) {
+                        tab.classList.remove('inactive-prompt');
+                        tab.classList.add('active-prompt');
+                    } else {
+                        tab.classList.remove('active-prompt');
+                        tab.classList.add('inactive-prompt');
+                    }
+                });
+                
+                // Afficher uniquement le bouton de copie correspondant
+                copyButtons.forEach(function(button) {
+                    button.classList.remove('visible');
+                });
+                
+                const activeButtonId = `copy-${activeTabId}-btn`;
+                document.getElementById(activeButtonId).classList.add('visible');
+            }
+            
+            // Écouter les changements d'onglets
+            tabs.forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    updateActivePrompt();
+                });
+            });
+            
+            // Fonction pour afficher le toast de confirmation
+            function showToast() {
+                const toast = document.getElementById('copy-toast');
+                toast.style.display = 'block';
+                setTimeout(function() {
+                    toast.style.display = 'none';
+                }, 3000);
+            }
+            
+            // Fonction de copie simplifiée - obtient le contenu du prompt actuellement visible
+            function copyCurrentPrompt() {
+                // Déterminer quel prompt est actuellement visible
+                const activePromptId = document.querySelector('.tab a.active').getAttribute('href').substring(1);
+                const promptContentId = `${activePromptId}-content`;
+                const promptText = document.getElementById(promptContentId).textContent;
+                
+                // Créer un élément textarea pour la copie
+                const textArea = document.createElement('textarea');
+                textArea.value = promptText;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '0';
+                textArea.style.top = '0';
+                textArea.style.width = '2em';
+                textArea.style.height = '2em';
+                textArea.style.padding = '0';
+                textArea.style.border = 'none';
+                textArea.style.outline = 'none';
+                textArea.style.boxShadow = 'none';
+                textArea.style.background = 'transparent';
+                document.body.appendChild(textArea);
+                
+                // Sélection du texte et tentative de copie
+                textArea.focus();
+                textArea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    showToast();
+                } catch (err) {
+                    console.error('Erreur lors de la copie:', err);
+                }
+                
+                document.body.removeChild(textArea);
+            }
+            
+            // Configurer tous les boutons de copie avec la même fonction
+            document.querySelectorAll('[id^="copy-prompt"]').forEach(function(button) {
+                button.addEventListener('click', copyCurrentPrompt);
+            });
+            
+            // Initialiser l'affichage
+            updateActivePrompt();
+        });
+    </script>
+</body>
+</html>
